@@ -1,9 +1,7 @@
 package org.mrp.modal;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ public class User {
     private List<UUID> ratingLikeIds;
     private List<UUID> favMedia;
 
-    public User(String userName, String userPw) {
+    public User(@org.jspecify.annotations.NonNull String userName, @org.jspecify.annotations.NonNull String userPw) {
         this.userId = UUID.randomUUID();
         this.userName = userName;
         this.userPw = userPw;

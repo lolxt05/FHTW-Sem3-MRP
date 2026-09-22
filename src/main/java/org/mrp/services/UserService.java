@@ -2,26 +2,19 @@ package org.mrp.services;
 
 import lombok.Data;
 import org.mrp.modal.User;
+import org.mrp.repository.user.UserManager;
 
 import java.util.*;
 
-@Data
-public class UserService {
+public class UserService extends UserManager{
 
     private static final UserService INSTANCE = new UserService();
-
-    private final TreeSet<String> userNames = new TreeSet<>();
-    private final TreeSet<String> userPasswords = new TreeSet<>();
-    private final TreeMap<UUID, User> cachedUsers = new TreeMap<>();
-    private int cachedUsersCount = 0;
-    private final int cachedUsersLimit = 10000;
+    private static final UserManager userManager = new UserManager();
 
     private UserService() {
         // initialize
     }
 
-    public static UserService getInstance() {
-        return INSTANCE;
-    }
+    public static UserService getInstance() {return INSTANCE;}
 }
 
