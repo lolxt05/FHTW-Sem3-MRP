@@ -2,25 +2,35 @@ package org.mrp.repository.user;
 
 import org.mrp.modal.User;
 
+import java.util.List;
 import java.util.UUID;
 
 public class UserRepositoryDB implements UserRepository{
 
-    UserRepositoryDB(){}
 
     @Override
-    public boolean addUser(User user) {
+    public boolean add(UUID key, User value) {
         return false;
     }
 
     @Override
-    public User getUser(UUID uuid) {
+    public User get(UUID key) {
         return null;
     }
 
     @Override
-    public User getUser(String username) {
+    public User get(String name) {
         return null;
+    }
+
+    @Override
+    public void update(UUID key, User Value) {
+
+    }
+
+    @Override
+    public void remove(UUID key) {
+
     }
 
     @Override
@@ -29,12 +39,7 @@ public class UserRepositoryDB implements UserRepository{
     }
 
     @Override
-    public void updateUser(User user) {
-
-    }
-
-    @Override
-    public void removeUser(UUID uuid) {
-
+    public List<String> getNameCompletions(String name) {
+        return List.of();
     }
 }

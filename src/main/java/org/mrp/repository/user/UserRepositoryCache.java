@@ -1,46 +1,53 @@
 package org.mrp.repository.user;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.mrp.cache.UUIDCache;
 import org.mrp.modal.User;
 
+import java.util.List;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-public class UserRepositoryCache implements UserRepository{
+public class UserRepositoryCache implements UserRepository {
 
     private static final TreeMap<String, UUID> uuidNameCache = new TreeMap<>();
-    private static final UUIDCache<User> uuidCache = new UUIDCache<User>();
+    private static final Cache<UUID, User> uuidCache = Caffeine.newBuilder().expireAfterWrite(100, TimeUnit.MINUTES).maximumSize(10000).build();
 
     public UserRepositoryCache(){}
-
     @Override
-    public boolean addUser(User user) {
+    public boolean add(UUID key, User user) {
         UUID uuid = user.getUserId();
 
-        if(uuidCache.contains(uuid)) {
+        if(uuidCache.getIfPresent(uuid) != null) {
             return false;
         }
 
-        uuidCache.insert(uuid,  user);
+        uuidCache.put(uuid,  user);
         uuidNameCache.put(user.getUserName(), user.getUserId());
 
         return true;
     }
-
     @Override
-    public User getUser(UUID uuid) {
-        return uuidCache.get(uuid);
+    public User get(UUID uuid) {
+        return uuidCache.getIfPresent(uuid);
     }
-
     @Override
-    public User getUser(String username) {
+    public User get(String username) {
         UUID uuid = uuidNameCache.get(username);
 
         if(uuid == null) {
             return null;
         }
 
-        return uuidCache.get(uuid);
+        return uuidCache.getIfPresent(uuid);
+    }
+
+    @Override
+    public void update(UUID key, User value) {
+        uuidCache.put(value.getUserId(), value);
+        uuidNameCache.put(value.getUserName(), value.getUserId());
     }
 
     @Override
@@ -51,8 +58,10 @@ public class UserRepositoryCache implements UserRepository{
             return null;
         }
 
-        User user = uuidCache.get(uuid);
-
+        User user = uuidCache.getIfPresent(uuid);
+        if(user == null) {
+            return null;
+        }
         if(user.getUserPw().equals(passwordHash)) {
             return uuid;
         }
@@ -60,15 +69,15 @@ public class UserRepositoryCache implements UserRepository{
     }
 
     @Override
-    public void updateUser(User user) {
-        uuidCache.insert(user.getUserId(), user);
-        uuidNameCache.put(user.getUserName(), user.getUserId());
+    public void remove(UUID uuid) {
+        User user = uuidCache.getIfPresent(uuid);
+        if(user != null) {
+            uuidNameCache.remove(user.getUserName());
+            uuidCache.invalidate(uuid);
+        }
     }
-
     @Override
-    public void removeUser(UUID uuid) {
-        User user = uuidCache.get(uuid);
-        uuidNameCache.remove(user.getUserName());
-        uuidCache.remove(uuid);
+    public List<String> getNameCompletions(String name) {
+        return List.of();
     }
 }

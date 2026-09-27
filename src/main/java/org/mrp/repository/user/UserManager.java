@@ -2,6 +2,7 @@ package org.mrp.repository.user;
 
 import org.mrp.modal.User;
 
+import java.util.List;
 import java.util.UUID;
 
 public class UserManager implements UserRepository {
@@ -9,30 +10,46 @@ public class UserManager implements UserRepository {
     public static final UserRepositoryDB DB = new UserRepositoryDB();
 
     @Override
-    public boolean addUser(User user) {
-        return cache.addUser(user) && DB.addUser(user);
+    public boolean add(UUID key, User value) {
+        return cache.add(key, value) && DB.add(key, value);
+    }
+
+    public boolean add(User value) {
+        return cache.add(value.getUserId(), value) && DB.add(value.getUserId(), value);
     }
 
     @Override
-    public User getUser(UUID uuid) {
-        User user = cache.getUser(uuid);
+    public User get(UUID key) {
+        User user = cache.get(key);
         if(user != null) {
             return user;
         }
-        return DB.getUser(uuid);
+        return DB.get(key);
     }
 
     @Override
-    public User getUser(String username) {
-        User user = cache.getUser(username);
+    public User get(String name) {
+        User user = cache.get(name);
 
         if(user != null) {
             return user;
         }
 
-        user = DB.getUser(username);
+        user = DB.get(name);
 
         return user;
+    }
+
+    @Override
+    public void update(UUID key, User Value) {
+        cache.update(key, Value);
+        DB.update(key, Value);
+    }
+
+    @Override
+    public void remove(UUID key) {
+        cache.remove(key);
+        DB.remove(key);
     }
 
     @Override
@@ -49,22 +66,11 @@ public class UserManager implements UserRepository {
 
         uuid = DB.login(username, passwordHash);
 
-        if(uuid != null) {
-            cache.addUser(DB.getUser(uuid));
-        }
-
         return uuid;
     }
 
     @Override
-    public void updateUser(User user) {
-        cache.updateUser(user);
-        DB.updateUser(user);
-    }
-
-    @Override
-    public void removeUser(UUID uuid) {
-        cache.removeUser(uuid);
-        DB.removeUser(uuid);
+    public List<String> getNameCompletions(String name) {
+        return List.of(name);
     }
 }
