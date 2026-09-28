@@ -24,23 +24,29 @@ public class Main {
         userManager.add(new User("u3", "Password"));
 
         System.out.println("Working User examples:");
-        System.out.println(userManager.login("u1", "Password"));
-        System.out.println(userManager.login("u2", "Password"));
-        System.out.println(userManager.login("u3", "Password"));
+        System.out.println("u1: " + userManager.login("u1", "Password"));
+        System.out.println("u2: " + userManager.login("u2", "Password"));
+        System.out.println("u3: " + userManager.login("u3", "Password"));
+
+        userManager.remove(userManager.login("u3", "Password"));
 
         System.out.println("\nNot Working User examples:");
-        System.out.println(userManager.login("u4", "Password"));
+        System.out.println("u3: " + userManager.login("u3", "Password"));
+        System.out.println("u4: " + userManager.login("u4", "Password"));
 
         mediaManager.add(new Media("Jurrasic Park 1", "Desc", MediaType.MOVIE, UUID.randomUUID(), 2000, Genres.ACTION, 12));
         mediaManager.add(new Media("Jurrasic Park 2", "Desc", MediaType.MOVIE, UUID.randomUUID(), 2000, Genres.ACTION, 12));
         mediaManager.add(new Media("Jurrasic Park 3", "Desc", MediaType.MOVIE, UUID.randomUUID(), 2000, Genres.ACTION, 12));
 
         System.out.println("\nWorking Media examples:");
-        System.out.println(mediaManager.get("Jurrasic Park 1"));
-        System.out.println(mediaManager.get("Jurrasic Park 2"));
-        System.out.println(mediaManager.get("Jurrasic Park 3"));
+        System.out.println("JP1: " + mediaManager.get("Jurrasic Park 1"));
+        System.out.println("JP2: " + mediaManager.get("Jurrasic Park 2"));
+        System.out.println("JP3: " + mediaManager.get("Jurrasic Park 3"));
+
+        mediaManager.remove(mediaManager.get("Jurrasic Park 3").getMediaId());
 
         System.out.println("\nNot Working Media examples:");
-        System.out.println(userManager.get("Jurrasic Park 4"));
+        System.out.println("JP3: " + mediaManager.get("Jurrasic Park 3"));
+        System.out.println("JP4: " + mediaManager.get("Jurrasic Park 4"));
     }
 }
