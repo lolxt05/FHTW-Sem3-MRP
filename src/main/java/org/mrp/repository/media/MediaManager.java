@@ -1,14 +1,30 @@
 package org.mrp.repository.media;
 
 import org.mrp.modal.Media;
+import org.mrp.repository.user.UserManager;
+import org.mrp.repository.user.UserRepository;
+import org.mrp.repository.user.UserRepositoryCache;
+import org.mrp.repository.user.UserRepositoryDB;
 
 import java.util.List;
 import java.util.UUID;
 
 public class MediaManager implements MediaRepository {
+    private final MediaRepositoryCache cache;
+    private final MediaRepositoryDB DB;
 
-    public static final MediaRepositoryCache cache = new MediaRepositoryCache();
-    public static final MediaRepositoryDB DB = new MediaRepositoryDB();
+    private static MediaManager instance = null;
+
+    private MediaManager() {
+        this.cache = new MediaRepositoryCache();
+        this.DB = new MediaRepositoryDB();
+    }
+
+    public static synchronized MediaManager getInstance() {
+        if (instance == null)
+            instance = new MediaManager();
+        return instance;
+    }
 
     @Override
     public boolean add(UUID key, Media value) {

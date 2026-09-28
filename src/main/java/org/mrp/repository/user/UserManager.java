@@ -6,8 +6,21 @@ import java.util.List;
 import java.util.UUID;
 
 public class UserManager implements UserRepository {
-    public static final UserRepositoryCache cache = new UserRepositoryCache();
-    public static final UserRepositoryDB DB = new UserRepositoryDB();
+    private final UserRepositoryCache cache;
+    private final UserRepositoryDB DB;
+
+    private static UserManager instance = null;
+
+    private UserManager() {
+        this.cache = new UserRepositoryCache();
+        this.DB = new UserRepositoryDB();
+    }
+
+    public static synchronized UserManager getInstance() {
+        if (instance == null)
+            instance = new UserManager();
+        return instance;
+    }
 
     @Override
     public boolean add(UUID key, User value) {

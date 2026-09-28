@@ -2,6 +2,7 @@ package org.mrp.repository.user;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import lombok.Getter;
 import org.mrp.cache.UUIDCache;
 import org.mrp.modal.User;
 
@@ -15,7 +16,10 @@ public class UserRepositoryCache implements UserRepository {
     private static final TreeMap<String, UUID> uuidNameCache = new TreeMap<>();
     private static final Cache<UUID, User> uuidCache = Caffeine.newBuilder().expireAfterWrite(100, TimeUnit.MINUTES).maximumSize(10000).build();
 
-    public UserRepositoryCache(){}
+
+    public UserRepositoryCache(){
+    }
+
     @Override
     public boolean add(UUID key, User user) {
         UUID uuid = user.getUserId();
