@@ -11,8 +11,8 @@ import java.util.UUID;
 @Data
 public class Media {
     private final UUID mediaId;
-    private String mediaTitle;
-    private String mediaDescription;
+    private String mediaTitle;  // max 64 chars
+    private String mediaDescription;  // max 256 chars
     private MediaType mediaType;
     private UUID creatorId;
     private int releaseYear;

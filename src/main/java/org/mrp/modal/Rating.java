@@ -17,7 +17,7 @@ public class Rating {
     private int likes;
     private List<UUID> likesIds;
     private int confirmedFlag;
-    private String comment;
+    private String comment; //256 max len
 
     public Rating(UUID creatorId, UUID mediaId, int starRating, String comment) {
         this.timestamp = new Date();

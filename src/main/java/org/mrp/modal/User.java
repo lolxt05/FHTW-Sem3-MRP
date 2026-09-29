@@ -11,9 +11,9 @@ import java.util.UUID;
 public class User {
     private final UUID userId;
     @NonNull
-    private String userName;
+    private String userName; // 64 max len
     @NonNull
-    private String userPw;
+    private String userPw;// 32 bytes is a sha256
     private int avgStars;
     private List<UUID> ratingsIds;
     private List<UUID> ratingLikeIds;

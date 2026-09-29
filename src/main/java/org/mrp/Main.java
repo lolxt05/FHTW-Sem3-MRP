@@ -15,7 +15,6 @@ import java.util.UUID;
 public class Main {
     static void main() {
 
-
         UserManager userManager = UserManager.getInstance();
         MediaManager mediaManager = MediaManager.getInstance();
 
@@ -48,5 +47,6 @@ public class Main {
         System.out.println("\nNot Working Media examples:");
         System.out.println("JP3: " + mediaManager.get("Jurrasic Park 3"));
         System.out.println("JP4: " + mediaManager.get("Jurrasic Park 4"));
+        System.out.println(UUID.randomUUID().toString().length());
     }
 }
