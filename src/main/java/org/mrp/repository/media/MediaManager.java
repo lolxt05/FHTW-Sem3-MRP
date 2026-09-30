@@ -17,7 +17,7 @@ public class MediaManager implements MediaRepository {
 
     private MediaManager() {
         this.cache = new MediaRepositoryCache();
-        this.DB = new MediaRepositoryDB();
+        this.DB  = new MediaRepositoryDB();
     }
 
     public static synchronized MediaManager getInstance() {

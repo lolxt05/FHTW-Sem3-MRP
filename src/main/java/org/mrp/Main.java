@@ -9,12 +9,13 @@ import org.mrp.repository.user.UserManager;
 import org.mrp.repository.user.UserRepositoryCache;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    static void main() {
 
+    static void main() {
         UserManager userManager = UserManager.getInstance();
         MediaManager mediaManager = MediaManager.getInstance();
 
