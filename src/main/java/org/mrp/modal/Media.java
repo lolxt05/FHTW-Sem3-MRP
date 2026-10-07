@@ -37,4 +37,20 @@ public class Media {
         this.avgScore = 0;
         this.favoriteCount = 0;
     }
+    public Media(UUID mediaId, String mediaTitle, String mediaDescription, MediaType mediaType,
+                 UUID creatorId, int releaseYear, Genres genre, int minAge,
+                 float avgScore, int favoriteCount) {
+        this.mediaId = mediaId;
+        this.mediaTitle = mediaTitle;
+        this.mediaDescription = mediaDescription;
+        this.mediaType = mediaType;
+        this.creatorId = creatorId;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
+        this.minAge = minAge;
+        this.ratingIds = new ArrayList<>();
+        this.favoriteIds = new ArrayList<>();
+        this.avgScore = avgScore;
+        this.favoriteCount = favoriteCount;
+    }
 }

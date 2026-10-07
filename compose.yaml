@@ -1,51 +1,31 @@
 services:
-  postgres:
-    image: postgres:16.11-alpine3.22
-    container_name: postgres
-    restart: unless-stopped
+  database:
+    image: 'postgres:17'
     ports:
-      - "5432:5432"
+      - 15432:5432
     env_file:
-      - ../../.env
-      - ../../.env.development.local
-    volumes:
-      - pg_volume:/var/lib/postgresql/data:rw
-      - ../postgres/postgres.conf:/etc/postgresql/postgresql.conf:ro
-      - ../postgres/init-scripts:/docker-entrypoint-initdb.d:ro
-    command: [ "postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_statement=none", "-c", "log_min_duration_statement=1000", "-c", "log_connections=on", "-c", "log_disconnections=on" ]
-    user: "70:70" # Postgres user
-    healthcheck:
-      test: [ "CMD-SHELL", 'pg_isready -U "$${POSTGRES_USER:-postgres}" -d "$${POSTGRES_DB:-postgres}" -h localhost || exit 1' ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
-    stop_grace_period: 120s
+      - .env
     networks:
-      - project_network
+      - postgres-network
+    volumes:
+      - ${PWD}/db-data/:/var/lib/postgresql/data/
+      - ${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   pgadmin:
-    image: elestio/pgadmin:latest
-    container_name: pgadmin
-    restart: unless-stopped
+    image: dpage/pgadmin4
     ports:
-      - "5050:8080"
+      - 15433:80
     env_file:
-      - ../../.env
-      - ../../.env.development.local
-    volumes:
-      - pgadmin_volume:/var/lib/pgadmin:rw
+      - .env
     depends_on:
-      - postgres
+      - database
     networks:
-      - project_network
+      - postgres-network
+    volumes:
+      # pgAdmin writes session data here. If startup fails with a permission
+      # error, set the host folder owner to 5050:5050 before starting.
+      - ${PWD}/pgadmin-data/:/var/lib/pgadmin/
 
 networks:
-  project_network:
+  postgres-network:
     driver: bridge
-
-volumes:
-  pg_volume:
-    driver: local
-  pgadmin_volume:
-    driver: local

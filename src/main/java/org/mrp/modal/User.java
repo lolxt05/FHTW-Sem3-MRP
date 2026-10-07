@@ -28,4 +28,13 @@ public class User {
         this.ratingsIds = new ArrayList<>();
         this.ratingLikeIds = new ArrayList<>();
     }
+    public User(UUID userId, @org.jspecify.annotations.NonNull String userName, @org.jspecify.annotations.NonNull String userPw, int avgStars) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userPw = userPw;
+        this.avgStars = avgStars;
+        this.favMedia = new ArrayList<>();
+        this.ratingsIds = new ArrayList<>();
+        this.ratingLikeIds = new ArrayList<>();
+    }
 }
