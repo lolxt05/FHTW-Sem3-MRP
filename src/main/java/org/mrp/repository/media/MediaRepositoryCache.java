@@ -2,7 +2,7 @@ package org.mrp.repository.media;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.mrp.modal.Media;
+import org.mrp.model.Media;
 
 import java.util.List;
 import java.util.TreeMap;

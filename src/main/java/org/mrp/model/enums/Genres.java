@@ -1,4 +1,4 @@
-package org.mrp.modal.enums;
+package org.mrp.model.enums;
 
 public enum Genres {
     ACTION,

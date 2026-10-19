@@ -1,6 +1,6 @@
 package org.mrp.repository.user;
 
-import org.mrp.modal.User;
+import org.mrp.model.User;
 import org.mrp.repository.Repository;
 
 import java.util.List;

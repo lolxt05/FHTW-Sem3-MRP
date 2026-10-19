@@ -1,9 +1,9 @@
 package org.mrp.repository.media;
 
 import org.mrp.config.DatabaseManager;
-import org.mrp.modal.enums.Genres;
-import org.mrp.modal.Media;
-import org.mrp.modal.enums.MediaType;
+import org.mrp.model.enums.Genres;
+import org.mrp.model.Media;
+import org.mrp.model.enums.MediaType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

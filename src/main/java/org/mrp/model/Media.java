@@ -1,8 +1,8 @@
-package org.mrp.modal;
+package org.mrp.model;
 
 import lombok.Data;
-import org.mrp.modal.enums.Genres;
-import org.mrp.modal.enums.MediaType;
+import org.mrp.model.enums.Genres;
+import org.mrp.model.enums.MediaType;
 
 import java.util.ArrayList;
 import java.util.List;

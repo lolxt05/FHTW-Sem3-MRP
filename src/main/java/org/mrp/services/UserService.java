@@ -1,40 +1,47 @@
 package org.mrp.services;
 
-import lombok.Data;
-import org.mrp.modal.User;
+import org.json.JSONObject;
+import org.mrp.model.HttpResponse;
+import org.mrp.model.User;
+import org.mrp.model.requests.UserAddRequest;
+import org.mrp.model.requests.UserDeleteRequest;
 import org.mrp.repository.user.UserManager;
-import org.mrp.repository.user.UserRepository;
 
 import java.util.*;
 
 public class UserService{
     UserManager userManager =  UserManager.getInstance();
-    public boolean add(String username, String password) {
-        return false;
+    HttpResponse invalid = new HttpResponse(500, "Hell nah");
+    HttpResponse useradded = new HttpResponse(200, "added the user");
+    HttpResponse userdel = new HttpResponse(200, "deleted the user");
+
+    public HttpResponse add(UserAddRequest request) {
+        if(userManager.add(new User(request.getUsername(), request.getPassword()))){
+            return useradded;
+        }else {
+            return invalid;
+        }
     }
 
-    public User get(UUID key) {
-        return null;
+    public HttpResponse get(JSONObject json) {
+        return invalid;
     }
 
-    public User get(String name) {
-        return null;
+    public HttpResponse update(JSONObject json) {
+        return invalid;
     }
 
-    public void update(UUID key, User Value) {
-
+    public HttpResponse remove(UserDeleteRequest request) {
+        userManager.remove(request.getUserId());
+        return userdel;
     }
 
-    public void remove(UUID key) {
-
+    public HttpResponse login(JSONObject json) {
+        return invalid;
     }
 
-    public UUID login(String username, String passwordHash) {
-        return null;
-    }
-
-    public List<String> getNameCompletions(String name) {
-        return List.of();
+    public HttpResponse getNameCompletions(JSONObject json) {
+        return invalid;
     }
 }
 

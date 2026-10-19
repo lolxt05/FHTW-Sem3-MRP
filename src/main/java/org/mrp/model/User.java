@@ -1,4 +1,4 @@
-package org.mrp.modal;
+package org.mrp.model;
 
 import lombok.Data;
 import lombok.NonNull;

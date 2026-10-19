@@ -1,6 +1,6 @@
 package org.mrp.repository.media;
 
-import org.mrp.modal.Media;
+import org.mrp.model.Media;
 import org.mrp.repository.Repository;
 
 import java.util.List;

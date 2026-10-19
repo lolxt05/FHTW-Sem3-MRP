@@ -2,9 +2,7 @@ package org.mrp.repository.user;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import lombok.Getter;
-import org.mrp.cache.UUIDCache;
-import org.mrp.modal.User;
+import org.mrp.model.User;
 
 import java.util.List;
 import java.util.TreeMap;

@@ -1,6 +1,6 @@
 package org.mrp.repository.user;
 
-import org.mrp.modal.User;
+import org.mrp.model.User;
 
 import java.util.List;
 import java.util.UUID;

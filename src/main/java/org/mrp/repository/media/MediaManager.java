@@ -1,10 +1,6 @@
 package org.mrp.repository.media;
 
-import org.mrp.modal.Media;
-import org.mrp.repository.user.UserManager;
-import org.mrp.repository.user.UserRepository;
-import org.mrp.repository.user.UserRepositoryCache;
-import org.mrp.repository.user.UserRepositoryDB;
+import org.mrp.model.Media;
 
 import java.util.List;
 import java.util.UUID;

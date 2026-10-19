@@ -1,7 +1,7 @@
 package org.mrp.repository.user;
 
 import org.mrp.config.DatabaseManager;
-import org.mrp.modal.User;
+import org.mrp.model.User;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

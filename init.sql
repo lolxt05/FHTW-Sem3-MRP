@@ -4,7 +4,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE TABLE users (
    user_id UUID PRIMARY KEY,
    user_name VARCHAR(64) NOT NULL UNIQUE,
-   user_pw CHAR(64) NOT NULL,
+   user_pw VARCHAR(255) NOT NULL,
    avg_stars NUMERIC(3, 2) NOT NULL
 );
 
