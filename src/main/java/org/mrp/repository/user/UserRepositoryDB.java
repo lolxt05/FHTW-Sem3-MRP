@@ -21,7 +21,7 @@ public class UserRepositoryDB implements UserRepository {
     private static final Logger LOGGER = Logger.getLogger(UserRepositoryDB.class.getName());
 
     private static final int MAX_USERNAME_LENGTH = 64;
-    private static final Pattern PW_HASH_PATTERN = Pattern.compile("^[0-9a-fA-F]{64}$");
+    private static final Pattern PW_HASH_PATTERN = Pattern.compile("^\\$2[aby]\\$\\d{2}\\$[./A-Za-z0-9]{53}$");
 
     private final Connection conn = Objects.requireNonNull(
             DatabaseManager.getConnection(), "No database connection available");
@@ -40,9 +40,6 @@ public class UserRepositoryDB implements UserRepository {
 
     private static final String DELETE_SQL =
             "DELETE FROM users WHERE user_id = ?";
-
-    private static final String LOGIN_SQL =
-            "SELECT user_id FROM users WHERE user_name = ? AND user_pw = ?";
 
     private static final String NAME_COMPLETION_SQL =
             "SELECT user_name FROM users WHERE user_name ILIKE ? ORDER BY user_name LIMIT 10";
@@ -89,43 +86,28 @@ public class UserRepositoryDB implements UserRepository {
     }
 
     @Override
-    public void update(UUID key, User value) {
+    public boolean update(UUID key, User value) {
         validate(key, value);
         try (PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
             ps.setString(1, value.getUserName());
             ps.setString(2, value.getUserPw());
             ps.setBigDecimal(3, BigDecimal.valueOf(value.getAvgStars()));
             ps.setObject(4, key);
-            ps.executeUpdate();
+            return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating user", e);
+            return false;
         }
     }
 
     @Override
-    public void remove(UUID key) {
+    public boolean remove(UUID key) {
         try (PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
             ps.setObject(1, key);
-            ps.executeUpdate();
+            return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error removing user", e);
-        }
-    }
-
-    @Override
-    public UUID login(String username, String passwordHash) {
-        if (username == null || passwordHash == null) {
-            return null;
-        }
-        try (PreparedStatement ps = conn.prepareStatement(LOGIN_SQL)) {
-            ps.setString(1, username);
-            ps.setString(2, passwordHash);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next() ? rs.getObject("user_id", UUID.class) : null;
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error during login", e);
-            return null;
+            return false;
         }
     }
 
@@ -166,9 +148,9 @@ public class UserRepositoryDB implements UserRepository {
         }
 
         String pw = user.getUserPw();
-        if ( PW_HASH_PATTERN.matcher(pw).matches()) {
+        if (!PW_HASH_PATTERN.matcher(pw).matches()) {
             throw new IllegalArgumentException(
-                    "Password must be a SHA-256 hash as 64 hex characters");
+                    "Password must be a bcrypt hash");
         }
     }
 

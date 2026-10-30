@@ -42,19 +42,31 @@ public class MediaRepositoryCache implements MediaRepository{
     }
 
     @Override
-    public void remove(UUID key) {
-        Media media = uuidCache.getIfPresent(key);
-        uuidCache.invalidate(key);
-        if(media == null){
-            return;
-        }
-        uuidMediaCache.remove(media.getMediaTitle(), key);
+    public List<Media> getAll() {
+        return List.copyOf(uuidCache.asMap().values());
     }
 
     @Override
-    public void update(UUID key, Media value) {
+    public boolean remove(UUID key) {
+        uuidMediaCache.values().remove(key);
+        uuidCache.invalidate(key);
+        return true;
+    }
+
+    public void removeByCreator(UUID creatorId) {
+        for (Media media : List.copyOf(uuidCache.asMap().values())) {
+            if (media.getCreatorId().equals(creatorId)) {
+                remove(media.getMediaId());
+            }
+        }
+    }
+
+    @Override
+    public boolean update(UUID key, Media value) {
+        uuidMediaCache.values().remove(key);
         uuidCache.put(key, value);
         uuidMediaCache.put(value.getMediaTitle(), value.getMediaId());
+        return true;
     }
 
     @Override

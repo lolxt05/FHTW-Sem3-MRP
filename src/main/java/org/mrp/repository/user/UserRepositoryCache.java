@@ -47,36 +47,18 @@ public class UserRepositoryCache implements UserRepository {
     }
 
     @Override
-    public void update(UUID key, User value) {
+    public boolean update(UUID key, User value) {
+        uuidNameCache.values().remove(key);
         uuidCache.put(value.getUserId(), value);
         uuidNameCache.put(value.getUserName(), value.getUserId());
+        return true;
     }
 
     @Override
-    public UUID login(String username, String passwordHash) {
-        UUID uuid = uuidNameCache.get(username);
-
-        if(uuid == null) {
-            return null;
-        }
-
-        User user = uuidCache.getIfPresent(uuid);
-        if(user == null) {
-            return null;
-        }
-        if(user.getUserPw().equals(passwordHash)) {
-            return uuid;
-        }
-        return null;
-    }
-
-    @Override
-    public void remove(UUID uuid) {
-        User user = uuidCache.getIfPresent(uuid);
-        if(user != null) {
-            uuidNameCache.remove(user.getUserName());
-            uuidCache.invalidate(uuid);
-        }
+    public boolean remove(UUID uuid) {
+        uuidNameCache.values().remove(uuid);
+        uuidCache.invalidate(uuid);
+        return true;
     }
     @Override
     public List<String> getNameCompletions(String name) {

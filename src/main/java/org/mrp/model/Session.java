@@ -18,6 +18,7 @@ public class Session {
     private final UUID userId;
     private final Instant createdAt;
     private final Duration ttl;
+    private Instant lastUsedAt;
 
     public Session(UUID userId, Duration ttl) {
         if (ttl == null || ttl.isNegative() || ttl.isZero()) {
@@ -27,6 +28,7 @@ public class Session {
         this.userId = userId;
         this.createdAt = Instant.now();
         this.ttl = ttl;
+        this.lastUsedAt = createdAt;
     }
 
     private static String generateToken() {
@@ -36,14 +38,14 @@ public class Session {
     }
 
     public Instant getExpiresAt() {
-        return createdAt.plus(ttl);
+        return lastUsedAt.plus(ttl);
     }
 
     public boolean isExpired() {
         return Instant.now().isAfter(getExpiresAt());
     }
 
-    public void addTTL(Duration ttl) {
-        this.ttl.plus(ttl);
+    public void refresh() {
+        this.lastUsedAt = Instant.now();
     }
 }
