@@ -40,6 +40,9 @@ public class MediaRepositoryDB implements MediaRepository {
     private static final String SELECT_BY_TITLE_SQL =
             "SELECT * FROM media WHERE LOWER(media_title) = LOWER(?) LIMIT 1";
 
+    private static final String SELECT_ALL_SQL =
+            "SELECT * FROM media ORDER BY media_title";
+
     private static final String UPDATE_SQL = """
             UPDATE media
                SET media_title = ?, media_description = ?, media_type = ?, creator_id = ?,
@@ -101,7 +104,21 @@ public class MediaRepositoryDB implements MediaRepository {
     }
 
     @Override
-    public void update(UUID key, Media value) {
+    public List<Media> getAll() {
+        List<Media> result = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                result.add(mapRow(rs));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error loading all media", e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean update(UUID key, Media value) {
         validate(key, value);
         try (PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
             ps.setString(1, value.getMediaTitle());
@@ -114,19 +131,21 @@ public class MediaRepositoryDB implements MediaRepository {
             ps.setBigDecimal(8, toScore(value.getAvgScore()));
             ps.setInt(9, value.getFavoriteCount());
             ps.setObject(10, key);
-            ps.executeUpdate();
+            return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating media", e);
+            return false;
         }
     }
 
     @Override
-    public void remove(UUID key) {
+    public boolean remove(UUID key) {
         try (PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
             ps.setObject(1, key);
-            ps.executeUpdate();
+            return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error removing media", e);
+            return false;
         }
     }
 

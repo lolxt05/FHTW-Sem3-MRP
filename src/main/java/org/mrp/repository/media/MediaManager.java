@@ -24,11 +24,11 @@ public class MediaManager implements MediaRepository {
 
     @Override
     public boolean add(UUID key, Media value) {
-        return cache.add(key, value) && DB.add(key, value);
+        return DB.add(key, value) && cache.add(key, value);
     }
 
     public boolean add(Media value) {
-        return cache.add(value.getMediaId(), value) && DB.add(value.getMediaId(), value);
+        return DB.add(value.getMediaId(), value) && cache.add(value.getMediaId(), value);
     }
 
     @Override
@@ -54,15 +54,22 @@ public class MediaManager implements MediaRepository {
     }
 
     @Override
-    public void update(UUID key, Media Value) {
-        cache.update(key, Value);
-        DB.update(key, Value);
+    public List<Media> getAll() {
+        return DB.getAll();
     }
 
     @Override
-    public void remove(UUID key) {
-        cache.remove(key);
-        DB.remove(key);
+    public boolean update(UUID key, Media Value) {
+        return DB.update(key, Value) && cache.update(key, Value);
+    }
+
+    @Override
+    public boolean remove(UUID key) {
+        return DB.remove(key) && cache.remove(key);
+    }
+
+    public void removeCachedByCreator(UUID creatorId) {
+        cache.removeByCreator(creatorId);
     }
 
     @Override

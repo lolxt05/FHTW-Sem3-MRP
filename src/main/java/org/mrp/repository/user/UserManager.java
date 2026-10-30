@@ -24,11 +24,11 @@ public class UserManager implements UserRepository {
 
     @Override
     public boolean add(UUID key, User value) {
-        return cache.add(key, value) && DB.add(key, value);
+        return DB.add(key, value) && cache.add(key, value);
     }
 
     public boolean add(User value) {
-        return cache.add(value.getUserId(), value) && DB.add(value.getUserId(), value);
+        return DB.add(value.getUserId(), value) && cache.add(value.getUserId(), value);
     }
 
     @Override
@@ -54,36 +54,17 @@ public class UserManager implements UserRepository {
     }
 
     @Override
-    public void update(UUID key, User Value) {
-        cache.update(key, Value);
-        DB.update(key, Value);
+    public boolean update(UUID key, User Value) {
+        return DB.update(key, Value) && cache.update(key, Value);
     }
 
     @Override
-    public void remove(UUID key) {
-        cache.remove(key);
-        DB.remove(key);
-    }
-
-    @Override
-    public UUID login(String username, String passwordHash) {
-        if(username.isEmpty() || passwordHash.isEmpty()) {
-            return null;
-        }
-
-        UUID uuid = cache.login(username, passwordHash);
-
-        if(uuid != null) {
-            return uuid;
-        }
-
-        uuid = DB.login(username, passwordHash);
-
-        return uuid;
+    public boolean remove(UUID key) {
+        return DB.remove(key) && cache.remove(key);
     }
 
     @Override
     public List<String> getNameCompletions(String name) {
-        return List.of(name);
+        return DB.getNameCompletions(name);
     }
 }

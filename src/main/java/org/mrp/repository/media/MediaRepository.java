@@ -10,7 +10,8 @@ public interface MediaRepository extends Repository<UUID, Media> {
     public boolean add(UUID key,Media value);
     public Media get(UUID key);
     public Media get(String name);
-    public void update(UUID key, Media Value);
-    public void remove(UUID key);
+    public List<Media> getAll();
+    public boolean update(UUID key, Media Value);
+    public boolean remove(UUID key);
     public List<String> getNameCompletion(String name);
 }

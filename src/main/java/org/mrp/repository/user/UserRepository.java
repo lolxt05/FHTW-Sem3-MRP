@@ -10,8 +10,7 @@ public abstract interface UserRepository extends Repository<UUID, User> {
     public boolean add(UUID key,User value);
     public User get(UUID key);
     public User get(String name);
-    public void update(UUID key, User Value);
-    public void remove(UUID key);
-    public UUID login(String username, String passwordHash);
+    public boolean update(UUID key, User Value);
+    public boolean remove(UUID key);
     public List<String> getNameCompletions(String name);
 }

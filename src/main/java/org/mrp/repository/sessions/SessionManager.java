@@ -5,6 +5,7 @@ import org.mrp.model.User;
 import org.mrp.model.exceptions.SessionTokenInvalid;
 
 import java.time.Duration;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionManager {
@@ -32,9 +33,10 @@ public class SessionManager {
         if(Sessions.containsKey(token)) {
             Session session = Sessions.get(token);
             if(!session.isExpired()) {
-                session.addTTL(Duration.ofMinutes(30));
+                session.refresh();
                 return session;
             }
+            Sessions.remove(token);
             throw new SessionTokenInvalid("Session token is expired");
         }
         throw new SessionTokenInvalid("invalid Session token");
@@ -42,5 +44,9 @@ public class SessionManager {
 
     public void invalidateSessions(String token) {
         Sessions.remove(token);
+    }
+
+    public void invalidateUserSessions(UUID userId) {
+        Sessions.values().removeIf(session -> session.getUserId().equals(userId));
     }
 }
