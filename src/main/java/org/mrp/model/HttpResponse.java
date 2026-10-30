@@ -1,6 +1,7 @@
 package org.mrp.model;
 
 import lombok.Data;
+import org.json.JSONObject;
 
 @Data
 public class HttpResponse {
@@ -8,6 +9,11 @@ public class HttpResponse {
         this.statusCode = status;
         this.body = body;
     }
+
+    public static HttpResponse message(int status, String message) {
+        return new HttpResponse(status, new JSONObject().put("message", message).toString());
+    }
+
     int statusCode;
     String body;
 }
